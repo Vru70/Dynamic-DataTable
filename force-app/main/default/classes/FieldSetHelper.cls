@@ -26,7 +26,7 @@ public with sharing class FieldSetHelper
                 query += f.getFieldPath() + ', '; // #2
             }
             query += 'Id FROM ' + strObjectApiName ;
-            query += 'LIMIT 10 '; 
+            query += ' LIMIT 10 '; 
 
             //Just in case criteria field not specified then it will return all records
             if(!(String.isEmpty(criteriaField) && String.isEmpty(criteriaFieldValue)))
