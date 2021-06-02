@@ -9,24 +9,24 @@
 public with sharing class FieldSetHelper 
 {
     @AuraEnabled (cacheable=true)
-    public static String getFieldsAndRecords(String strObjectApiName, String strfieldSetName,
-                                             String criteriaField, String criteriaFieldValue)                                       
+    public static String getFieldsAndRecords(String strObjectApiName, String strfieldSetName,String criteriaField, String criteriaFieldValue)                                       
     {
         Map<String, String> returnMap = new Map<String,String>();
         if(!String.isEmpty(strObjectApiName) && !String.isEmpty(strfieldSetName))
         {
             //get fields from FieldSet
-            SObject sObj = (SObject)(Type.forName('Schema.'+ strObjectApiName).newInstance());
+            SObject sObj = (SObject)(Type.forName('Schema.'+ strObjectApiName).newInstance()); //  Create new sObj
             List<Schema.FieldSetMember> lstFSMember = 
-                sObj.getSObjectType().getDescribe().fieldSets.getMap().get(strfieldSetName).getFields();
+                sObj.getSObjectType().getDescribe().fieldSets.getMap().get(strfieldSetName).getFields(); // Collecting all fields from fildSet
 
             //prepare SOQL query based on fieldAPIs	
             String query = 'SELECT ';
             for(Schema.FieldSetMember f : lstFSMember) 
             {
-                query += f.getFieldPath() + ', ';
+                query += f.getFieldPath() + ', '; // #2
             }
             query += 'Id FROM ' + strObjectApiName ;
+            query += 'LIMIT 10 '; 
 
             //Just in case criteria field not specified then it will return all records
             if(!(String.isEmpty(criteriaField) && String.isEmpty(criteriaFieldValue)))
@@ -45,3 +45,7 @@ public with sharing class FieldSetHelper
         return null;
     }
 }
+/**
+ *  #1 Use of Schema.FieldSetMember to get the fields from Field Set.
+ *  #2 getFieldPath() of FieldSetMember gives the fieldAPI which has been used to build SOQL query.
+ */
