@@ -1,0 +1,23 @@
+<!--
+  @author            : Vrushabh Uprikar
+  @last modified on  : 06-02-2021
+  @last modified by  : Vrushabh Uprikar
+  Modifications Log 
+  Ver   Date         Author             Modification
+  1.0   06-02-2021   Vrushabh Uprikar   Initial Version
+-->
+<template>
+    <div class="c-container">
+        <div class="slds-card">
+            <div class="slds-media__body">
+                <h2 class="slds-card__header-title">
+                    <span>{lblobjectName} Records ({recordCount})</span>
+                </h2>
+            </div>
+            <div class="slds-card__body">
+                <lightning-datatable key-field="Id" data={tableData} columns={columns} min-column-width=200>
+                </lightning-datatable>
+            </div>
+        </div>
+    </div>
+</template>
