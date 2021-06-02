@@ -22,14 +22,11 @@ export default class DynamicDataTable extends LightningElement
 
     connectedCallback()
     {
-        let firstTimeEntry = false;
-        let firstFieldAPI;
-
         //make an implicit call to fetch records from database
         getFieldsAndRecords({
             strObjectApiName: this.SFDCobjectApiName,
             strfieldSetName: this.fieldSetName
-        })
+            })
             .then(data => {
                 //get the entire map
                 let objStr = JSON.parse(data);
@@ -49,7 +46,6 @@ export default class DynamicDataTable extends LightningElement
                             label: element.label,
                             fieldName: element.fieldPath
                         }];
-                    
                 });
                 //finally assigns item array to columns
                 this.columns = items;
