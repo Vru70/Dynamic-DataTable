@@ -11,10 +11,10 @@ import getFieldsAndRecords from '@salesforce/apex/FieldSetHelper.getFieldsAndRec
 export default class DynamicDataTable extends LightningElement
 {
     @api recordId;  // record id from record detail page e.g. ''0012v00002WCUdxAAH'
-    @api SFDCobjectApiName; //kind of related list object API Name e.g. 'Case'
-    @api fieldSetName; // FieldSet which is defined on that above object e.g. 'CaseRelatedListFS'
+    @api SFDCobjectApiName; //kind of related list object API Name e.g. 'Account'
+    @api fieldSetName; // FieldSet which is defined on that above object e.g. 'AccFieldSet'
     @api criteriaFieldAPIName; // This field will be used in WHERE condition e.g.'AccountId'
-    @api firstColumnAsRecordHyperLink; //if the first column can be displayed as hyperlink
+    @api firstColumnAsRecordHyperLink; //if the first column can be displayed as hyperlink YES/NO
 
     @track columns;   //columns for List of fields datatable
     @track tableData;   //data for list of fields datatable
