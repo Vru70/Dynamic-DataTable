@@ -1,6 +1,6 @@
 /**
  * @author            : Vrushabh Uprikar
- * @last modified on  : 06-02-2021
+ * @last modified on  : 06-03-2021
  * @last modified by  : Vrushabh Uprikar
  * Modifications Log 
  * Ver   Date         Author             Modification
@@ -26,7 +26,7 @@ public with sharing class FieldSetHelper
                 query += f.getFieldPath() + ', '; // getFieldPath() of FieldSetMember gives the fieldAPI which has been used to build SOQL query.
             }
             query += 'Id FROM ' + strObjectApiName ;
-            query += ' LIMIT 10 '; 
+            query += ' LIMIT 100 '; 
         
 	        //execute query
             List<SObject> lstRecords = Database.query(query);
