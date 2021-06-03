@@ -1,6 +1,6 @@
 /**
  * @author            : Vrushabh Uprikar
- * @last modified on  : 06-02-2021
+ * @last modified on  : 06-03-2021
  * @last modified by  : Vrushabh Uprikar
  * Modifications Log 
  * Ver   Date         Author             Modification
@@ -8,6 +8,7 @@
 **/
 import { LightningElement, api, track } from 'lwc';
 import getFieldsAndRecords from '@salesforce/apex/FieldSetHelper.getFieldsAndRecords';
+let i = 0; // Counter
 export default class DynamicDataTable extends LightningElement
 {
     @api recordId;  // record id from record detail page e.g. ''0012v00002WCUdxAAH'
@@ -15,10 +16,19 @@ export default class DynamicDataTable extends LightningElement
     @api fieldSetName; // FieldSet which is defined on that above object e.g. 'AccFieldSet'
 
     @track columns;   //columns for List of fields datatable
-    @track tableData;   //data for list of fields datatable
+    allData;   //data for list of fields datatable
 
     @track recordCount; //this displays record count inside the ()
     @track lblobjectName; //this displays the Object Name whose records are getting displayed
+
+    @track page = 1; //this will initialize 1st page
+    @track startingRecord = 1; //start record position per page
+    @track endingRecord = 0; //end record position per page
+    @track pageSize = 5; //default value we are assigning
+    @track totalRecountCount = 0; //total record count received from all retrieved records
+    @track totalPage = 0; //total number of page is needed to display all records
+    @track dataToDisp = []; //data to be displayed in the table
+
 
     connectedCallback()
     {
@@ -47,22 +57,73 @@ export default class DynamicDataTable extends LightningElement
                             fieldName: element.fieldPath
                         }];
                 });
+
                 //finally assigns item array to columns
                 this.columns = items;
-                this.tableData = listOfRecords;
+                var xx = JSON.stringify(listOfRecords);
+                this.allData = JSON.parse(xx);
+                console.log('this.allData:', this.allData); // collecting all data
 
-                console.log('listOfRecords', listOfRecords);
+                this.totalRecountCount = listOfRecords.length;
+                console.log('totalRecountCount >', this.totalRecountCount); //here it is 10   
+
+                this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize); //here it is 5
+                console.log('totalPage >', this.totalPage);
+
+                this.dataToDisp = this.allData.slice(0, this.pageSize);
+                console.log('this.dataToDisp', this.dataToDisp);
+                this.endingRecord = this.pageSize;
 
                 //assign values to display Object Name and Record Count on the screen
-                this.lblobjectName = this.SFDCobjectApiName;
-                this.recordCount = this.tableData.length;
+                this.lblobjectName = this.SFDCobjectApiName; // Assigning Headder i.e Acount
                 this.error = undefined;
             })
             .catch(error => {
                 this.error = error;
                 console.log('error', error);
-                this.tableData = undefined;
+                this.allData = undefined;
                 this.lblobjectName = this.SFDCobjectApiName;
             })
+    }
+
+    //this method displays records page by page
+    displayRecordPerPage(page)
+    {
+
+        /*let's say for 2nd page, it will be => "Displaying 6 to 10 of 23 records. Page 2 of 5"
+        page = 2; pageSize = 5; startingRecord = 5, endingRecord = 10
+        so, slice(5,10) will give 5th to 9th records.
+        */
+        this.startingRecord = ((page - 1) * this.pageSize);
+        this.endingRecord = (this.pageSize * page);
+
+        this.endingRecord = (this.endingRecord > this.totalRecountCount)
+            ? this.totalRecountCount : this.endingRecord;
+
+        this.dataToDisp = this.allData.slice(this.startingRecord, this.endingRecord);
+
+        //increment by 1 to display the startingRecord count, 
+        //so for 2nd page, it will show "Displaying 6 to 10 of 23 records. Page 2 of 5"
+        this.startingRecord = this.startingRecord + 1;
+    }
+
+    //clicking on previous button this method will be called
+    previousHandler()
+    {
+        if (this.page > 1)
+        {
+            this.page = this.page - 1; //decrease page by 1
+            this.displayRecordPerPage(this.page);
+        }
+    }
+
+    //clicking on next button this method will be called
+    nextHandler()
+    {
+        if ((this.page < this.totalPage) && this.page !== this.totalPage)
+        {
+            this.page = this.page + 1; //increase page by 1
+            this.displayRecordPerPage(this.page);
+        }
     }
 }
