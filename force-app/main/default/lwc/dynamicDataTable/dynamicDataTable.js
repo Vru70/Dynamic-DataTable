@@ -9,8 +9,7 @@
 import { LightningElement, api, track } from 'lwc';
 import getFieldsAndRecords from '@salesforce/apex/FieldSetHelper.getFieldsAndRecords';
 let i = 0; // Counter
-export default class DynamicDataTable extends LightningElement
-{
+export default class DynamicDataTable extends LightningElement {
     @api recordId;  // record id from record detail page e.g. ''0012v00002WCUdxAAH'
     @api SFDCobjectApiName; //kind of related list object API Name e.g. 'Account'
     @api fieldSetName; // FieldSet which is defined on that above object e.g. 'AccFieldSet'
@@ -29,6 +28,12 @@ export default class DynamicDataTable extends LightningElement
     @track totalPage = 0; //total number of page is needed to display all records
     @track dataToDisp = []; //data to be displayed in the table
 
+    
+    @track totalSelection;
+    @track hasPageChanged;
+    @track initialLoad = true;
+    @track selectedRows = [];
+    
 
     connectedCallback()
     {
@@ -74,7 +79,6 @@ export default class DynamicDataTable extends LightningElement
                 console.log('this.dataToDisp', this.dataToDisp);
                 this.endingRecord = this.pageSize;
 
-                //assign values to display Object Name and Record Count on the screen
                 this.lblobjectName = this.SFDCobjectApiName; // Assigning Headder i.e Acount
                 this.error = undefined;
             })
@@ -90,10 +94,6 @@ export default class DynamicDataTable extends LightningElement
     displayRecordPerPage(page)
     {
 
-        /*let's say for 2nd page, it will be => "Displaying 6 to 10 of 23 records. Page 2 of 5"
-        page = 2; pageSize = 5; startingRecord = 5, endingRecord = 10
-        so, slice(5,10) will give 5th to 9th records.
-        */
         this.startingRecord = ((page - 1) * this.pageSize);
         this.endingRecord = (this.pageSize * page);
 
@@ -101,9 +101,6 @@ export default class DynamicDataTable extends LightningElement
             ? this.totalRecountCount : this.endingRecord;
 
         this.dataToDisp = this.allData.slice(this.startingRecord, this.endingRecord);
-
-        //increment by 1 to display the startingRecord count, 
-        //so for 2nd page, it will show "Displaying 6 to 10 of 23 records. Page 2 of 5"
         this.startingRecord = this.startingRecord + 1;
     }
 
@@ -114,7 +111,9 @@ export default class DynamicDataTable extends LightningElement
         {
             this.page = this.page - 1; //decrease page by 1
             this.displayRecordPerPage(this.page);
-        }
+            this.hasPageChanged = true;
+            this.template.querySelector('lightning-datatable').selectedRows = this.selectedRows;
+        }  
     }
 
     //clicking on next button this method will be called
@@ -124,6 +123,29 @@ export default class DynamicDataTable extends LightningElement
         {
             this.page = this.page + 1; //increase page by 1
             this.displayRecordPerPage(this.page);
+            this.hasPageChanged = true;
+            this.template.querySelector('lightning-datatable').selectedRows = this.selectedRows;
+        }  
+    }
+
+    handleRowSelection(event)
+    {
+        if (!this.hasPageChanged || this.initialLoad)
+        {
+            //setting initial load false
+            this.initialLoad = false;
+            
+            var aa = event.detail.selectedRows;
+            var selctedRow = JSON.parse(JSON.stringify(aa))
+            console.log('selctedRow:', selctedRow);
+            let idSet = new Set();
+            for (let i = 0; i < selctedRow.length; i++) {
+                idSet.add(selctedRow[i].Id);
+            }
+
+            this.selectedRows = Array.from(idSet);
+            console.log('selectedRows:', JSON.stringify(this.selectedRows));
         }
     }
+    
 }

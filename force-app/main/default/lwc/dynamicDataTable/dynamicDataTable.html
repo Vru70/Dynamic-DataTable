@@ -11,12 +11,14 @@
         <div class="slds-card">
             <div class="slds-media__body">
                 <h2 class="slds-card__header-title slds-m-around_x-small">
-                    <span>{lblobjectName}</span>
+                    <span>{lblobjectName} Selected {totalSelection}</span>
+                    
                 </h2>
             </div>
             <div class="slds-card__body">
-                <lightning-datatable  key-field="Id" data={dataToDisp} 
-                                        columns={columns} min-column-width="170">
+                <lightning-datatable    key-field="Id" data={dataToDisp} onrowselection={handleRowSelection}
+                                        show-row-number-column columns={columns} min-column-width="170"
+                                        class="slds-table_bordered slds-table_striped slds-scrollable slds-m-around_medium">
                 </lightning-datatable>
                 <p class="slds-m-vertical_medium content">
                     Displaying {startingRecord} to {endingRecord} of {totalRecountCount} records.
