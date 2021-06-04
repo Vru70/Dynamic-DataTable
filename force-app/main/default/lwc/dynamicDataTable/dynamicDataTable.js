@@ -110,21 +110,18 @@ export default class DynamicDataTable extends LightningElement {
         
         if (this.page > 1)
         {
-           //// this.setData[this.page] = this.selectedRows;
-           // console.log('In prev page:' + this.page + ' ' + this.setData[this.page]);
-            
             this.page = this.page - 1; //decrease page by 1
             this.displayRecordPerPage(this.page);
             this.hasPageChanged = true;
             this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
+            console.log('Inside pre:', JSON.stringify(this.setData[this.page]));
             
         }  
     }
 
     //clicking on next button this method will be called
     nextHandler()
-    {
-        
+    {   
         if ((this.page < this.totalPage) && this.page !== this.totalPage)
         {            
             this.page = this.page + 1; //increase page by 1
@@ -132,30 +129,15 @@ export default class DynamicDataTable extends LightningElement {
             this.displayRecordPerPage(this.page);
             this.hasPageChanged = true;
             this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
-            
+            console.log('Inside Next:', JSON.stringify(this.setData[this.page]));
         }  
     }
 
     handleRowSelection(event)
     {
-       // if (this.hasPageChanged || this.initialLoad)
-       // {
-            //setting initial load false
-            this.initialLoad = false;
-            
-           /* var aa = event.detail.selectedRows;
-            var selctedRow = JSON.parse(JSON.stringify(aa))
-            console.log('selctedRow:', selctedRow);
-            let idSet = new Set();
-            for (let i = 0; i < selctedRow.length; i++) {
-                idSet.add(selctedRow[i].Id);
-            }
-
-            this.selectedRows = Array.from(idSet);*/
-            this.selectedRows = this.template.querySelector('lightning-datatable').selectedRows;
+        this.selectedRows = this.template.querySelector('lightning-datatable').selectedRows;
         console.log('selectedRows:', JSON.stringify(this.selectedRows));
         this.setData[this.page] = this.selectedRows;
-       // }
     }
     
 }
