@@ -1,6 +1,6 @@
 /**
  * @author            : Vrushabh Uprikar
- * @last modified on  : 06-03-2021
+ * @last modified on  : 06-04-2021
  * @last modified by  : Vrushabh Uprikar
  * Modifications Log 
  * Ver   Date         Author             Modification
@@ -33,7 +33,7 @@ export default class DynamicDataTable extends LightningElement {
     @track hasPageChanged;
     @track initialLoad = true;
     @track selectedRows = [];
-    
+    setData = [];
 
     connectedCallback()
     {
@@ -107,35 +107,43 @@ export default class DynamicDataTable extends LightningElement {
     //clicking on previous button this method will be called
     previousHandler()
     {
+        
         if (this.page > 1)
         {
+           //// this.setData[this.page] = this.selectedRows;
+           // console.log('In prev page:' + this.page + ' ' + this.setData[this.page]);
+            
             this.page = this.page - 1; //decrease page by 1
             this.displayRecordPerPage(this.page);
             this.hasPageChanged = true;
-            this.template.querySelector('lightning-datatable').selectedRows = this.selectedRows;
+            this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
+            
         }  
     }
 
     //clicking on next button this method will be called
     nextHandler()
     {
+        
         if ((this.page < this.totalPage) && this.page !== this.totalPage)
-        {
+        {            
             this.page = this.page + 1; //increase page by 1
+            console.log('crpage:', this.page);
             this.displayRecordPerPage(this.page);
             this.hasPageChanged = true;
-            this.template.querySelector('lightning-datatable').selectedRows = this.selectedRows;
+            this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
+            
         }  
     }
 
     handleRowSelection(event)
     {
-        if (!this.hasPageChanged || this.initialLoad)
-        {
+       // if (this.hasPageChanged || this.initialLoad)
+       // {
             //setting initial load false
             this.initialLoad = false;
             
-            var aa = event.detail.selectedRows;
+           /* var aa = event.detail.selectedRows;
             var selctedRow = JSON.parse(JSON.stringify(aa))
             console.log('selctedRow:', selctedRow);
             let idSet = new Set();
@@ -143,9 +151,11 @@ export default class DynamicDataTable extends LightningElement {
                 idSet.add(selctedRow[i].Id);
             }
 
-            this.selectedRows = Array.from(idSet);
-            console.log('selectedRows:', JSON.stringify(this.selectedRows));
-        }
+            this.selectedRows = Array.from(idSet);*/
+            this.selectedRows = this.template.querySelector('lightning-datatable').selectedRows;
+        console.log('selectedRows:', JSON.stringify(this.selectedRows));
+        this.setData[this.page] = this.selectedRows;
+       // }
     }
     
 }
