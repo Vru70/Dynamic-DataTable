@@ -1,30 +1,35 @@
 <!--
   @author            : Vrushabh Uprikar
-  @last modified on  : 06-03-2021
+  @last modified on  : 06-04-2021
   @last modified by  : Vrushabh Uprikar
   Modifications Log 
   Ver   Date         Author             Modification
   1.0   06-02-2021   Vrushabh Uprikar   Initial Version
 -->
 <template>
-    <div class="c-container">
-        <div class="slds-card">
-            <div class="slds-media__body">
-                <h2 class="slds-card__header-title slds-m-around_x-small">
-                    <span>{lblobjectName} Selected {totalSelection}</span>
-                    
-                </h2>
-            </div>
-            <div class="slds-card__body">
-                <lightning-datatable    key-field="Id" data={dataToDisp} onrowselection={handleRowSelection}
-                                        show-row-number-column columns={columns} min-column-width="170"
-                                        class="slds-table_bordered slds-table_striped slds-scrollable slds-m-around_medium">
-                </lightning-datatable>
-                <p class="slds-m-vertical_medium content">
-                    Displaying {startingRecord} to {endingRecord} of {totalRecountCount} records.
-                    Page {page} of {totalPage}. </p>
-                <c-paginator onprevious={previousHandler} onnext={nextHandler}></c-paginator>
-            </div>
+    <lightning-card title={lblobjectName}>
+        <div class="slds-var-m-around_medium">
+            <lightning-input type="search" onchange={handleKeyChange} class="slds-var-m-bottom_small" label="Search"
+                value={searchKey}>
+            </lightning-input>
+
+            <lightning-datatable key-field="Id" data={dataToDisp} onrowselection={handleRowSelection}
+                show-row-number-column columns={columns} min-column-width="170">
+            </lightning-datatable>
+            </br>
+            <lightning-layout horizontal-align="space">
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}>
+                    </lightning-button>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    Page {page} of {totalPage}
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right"
+                        onclick={nextHandler}></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
         </div>
-    </div>
+    </lightning-card>
 </template>
