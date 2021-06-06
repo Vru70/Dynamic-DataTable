@@ -1,6 +1,6 @@
 /**
  * @author            : Vrushabh Uprikar
- * @last modified on  : 06-04-2021
+ * @last modified on  : 06-06-2021
  * @last modified by  : Vrushabh Uprikar
  * Modifications Log 
  * Ver   Date         Author             Modification
@@ -8,7 +8,7 @@
 **/
 import { LightningElement, api, track } from 'lwc';
 import getFieldsAndRecords from '@salesforce/apex/FieldSetHelper.getFieldsAndRecords';
-let i = 0; // Counter
+
 export default class DynamicDataTable extends LightningElement
 {
     @api recordId;  // record id from record detail page e.g. ''0012v00002WCUdxAAH'
@@ -35,6 +35,9 @@ export default class DynamicDataTable extends LightningElement
     @track initialLoad = true;
     @track selectedRows = [];
     setData = [];
+
+    @track searchString;
+    @track searchedAccountData = [];
 
     connectedCallback()
     {
@@ -66,16 +69,17 @@ export default class DynamicDataTable extends LightningElement
             //finally assigns item array to columns
             var xx = JSON.stringify(listOfRecords);
             this.allData = JSON.parse(xx);
-            console.log('this.allData:', this.allData); // collecting all data
+            //console.log('this.allData:', this.allData); // collecting all data
             this.columns = items;
+            console.log('this.coumns:', JSON.stringify(this.columns));
             this.totalRecountCount = listOfRecords.length;
-            console.log('totalRecountCount >', this.totalRecountCount); //here it is 10   
+            //console.log('totalRecountCount >', this.totalRecountCount); //here it is 10   
             
             this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize); //here it is 5
-            console.log('totalPage >', this.totalPage);
+            //console.log('totalPage >', this.totalPage);
             
             this.dataToDisp = this.allData.slice(0, this.pageSize);
-            console.log('this.dataToDisp', this.dataToDisp);
+            //console.log('this.dataToDisp', this.dataToDisp);
             this.endingRecord = this.pageSize;
             
             this.lblobjectName = this.SFDCobjectApiName; // Assigning Headder i.e Acount
@@ -113,8 +117,7 @@ export default class DynamicDataTable extends LightningElement
             this.displayRecordPerPage(this.page);
             this.hasPageChanged = true;
             this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
-            console.log('Inside pre:', JSON.stringify(this.setData[this.page]));
-
+           // console.log('Inside pre:', JSON.stringify(this.setData[this.page]));
         }
     }
 
@@ -124,18 +127,25 @@ export default class DynamicDataTable extends LightningElement
         if ((this.page < this.totalPage) && this.page !== this.totalPage)
         {
             this.page = this.page + 1; //increase page by 1
-            console.log('crpage:', this.page);
+            //console.log('crpage:', this.page);
             this.displayRecordPerPage(this.page);
             this.hasPageChanged = true;
             this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
-            console.log('Inside Next:', JSON.stringify(this.setData[this.page]));
+            //console.log('Inside Next:', JSON.stringify(this.setData[this.page]));
         }
     }
 
     handleRowSelection(event)
     {
+        // collected Id of selected items
         this.selectedRows = this.template.querySelector('lightning-datatable').selectedRows;
-        console.log('selectedRows:', JSON.stringify(this.selectedRows));
+        //console.log('selectedRows:', JSON.stringify(this.selectedRows));
         this.setData[this.page] = this.selectedRows;
+        // using page number assigning values to array
+    }
+
+    handleKeyChange(event)
+    {
+      
     }
 }
