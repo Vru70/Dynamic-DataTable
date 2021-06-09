@@ -1,6 +1,6 @@
 /**
  * @author            : Vrushabh Uprikar
- * @last modified on  : 06-06-2021
+ * @last modified on  : 06-07-2021
  * @last modified by  : Vrushabh Uprikar
  * Modifications Log 
  * Ver   Date         Author             Modification
@@ -71,7 +71,7 @@ export default class DynamicDataTable extends LightningElement
             this.allData = JSON.parse(xx);
             //console.log('this.allData:', this.allData); // collecting all data
             this.columns = items;
-            console.log('this.coumns:', JSON.stringify(this.columns));
+            console.log('this.columns:', JSON.stringify(this.columns));
             this.totalRecountCount = listOfRecords.length;
             //console.log('totalRecountCount >', this.totalRecountCount); //here it is 10   
             
@@ -146,6 +146,13 @@ export default class DynamicDataTable extends LightningElement
 
     handleKeyChange(event)
     {
-      
+        var searchString = event.target.value;
+        var allRecords = this.allData;
+        var searchResults = [];
+
+        
+        
+       // this.searchedAccountData = searchResults;
+     
     }
 }
