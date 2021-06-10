@@ -155,4 +155,16 @@ export default class DynamicDataTable extends LightningElement
        // this.searchedAccountData = searchResults;
      
     }
+
+    firstHandler(event)
+    {
+
+    }
+
+    lastHandler(event)
+    {
+        
+    }
+
+
 }
