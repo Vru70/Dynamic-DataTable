@@ -39,6 +39,9 @@ export default class DynamicDataTable extends LightningElement
     @track searchString;
     @track searchedAccountData = [];
 
+    @track pageList = [];
+
+
     connectedCallback()
     {
         //make an implicit call to fetch records from database
@@ -158,13 +161,29 @@ export default class DynamicDataTable extends LightningElement
 
     firstHandler(event)
     {
-
+        this.page = 1; //increase page by 1
+        //console.log('crpage:', this.page);
+        this.displayRecordPerPage(this.page);
+        this.hasPageChanged = true;
+        this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
     }
 
     lastHandler(event)
     {
-        
+        this.page = this.totalPage; //increase page by 1
+        //console.log('crpage:', this.page);
+        this.displayRecordPerPage(this.page);
+        this.hasPageChanged = true;
+        this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
     }
 
+    handlePages(button)
+    {
+        this.page = button.target.label;
+        this.displayRecordPerPage(this.page);
+        this.hasPageChanged = true;
+        this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
+
+    }
 
 }
