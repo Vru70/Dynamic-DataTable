@@ -18,7 +18,7 @@
                 show-row-number-column columns={columns} min-column-width="170">
             </lightning-datatable>
             <lightning-layout horizontal-align="space">
-                <lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
                     <lightning-button label="First" icon-name="utility:chevronleft" onclick={firstHandler}>
                     </lightning-button>
                 </lightning-layout-item>
@@ -27,24 +27,24 @@
                     <lightning-button label="Previous" icon-name="utility:chevronleft" onclick={previousHandler}>
                     </lightning-button>
                 </lightning-layout-item>
-                <lightning-button-group>
-                    <template if:true={pageList} for:each={pageList} for:item="page">
-                        <lightning-button key={page} label={page} onclick={handlePages}>
 
-                        </lightning-button>
-                    </template>
-                </lightning-button-group>
-                <lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
+                    <lightning-button-group>
+                        <template if:true={pageList} for:each={pageList} for:item="page">
+                            <lightning-button key={page} label={page} onclick={handlePages}>
 
+                            </lightning-button>
+                        </template>
+                    </lightning-button-group>
                 </lightning-layout-item>
 
-                <lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
                     <lightning-button label="Next" icon-name="utility:chevronright" icon-position="right"
                         onclick={nextHandler}>
                     </lightning-button>
                 </lightning-layout-item>
 
-                <lightning-layout-item>
+                <lightning-layout-item flexibility="auto">
                     <lightning-button label="Last" icon-name="utility:chevronright" icon-position="right"
                         onclick={lastHandler}>
                     </lightning-button>

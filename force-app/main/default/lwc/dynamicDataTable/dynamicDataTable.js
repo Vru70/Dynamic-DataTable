@@ -40,7 +40,8 @@ export default class DynamicDataTable extends LightningElement
     @track searchedAccountData = [];
 
     @track pageList = [];
-
+    startPage;
+    endPage;
 
     connectedCallback()
     {
@@ -84,6 +85,9 @@ export default class DynamicDataTable extends LightningElement
             this.dataToDisp = this.allData.slice(0, this.pageSize);
             //console.log('this.dataToDisp', this.dataToDisp);
             this.endingRecord = this.pageSize;
+
+            
+            
             
             this.lblobjectName = this.SFDCobjectApiName; // Assigning Headder i.e Acount
             this.error = undefined;
@@ -184,6 +188,13 @@ export default class DynamicDataTable extends LightningElement
         this.hasPageChanged = true;
         this.template.querySelector('lightning-datatable').selectedRows = this.setData[this.page];
 
+    }
+
+    setpageList()
+    {
+        pageList = [];
+        startPage;
+        endPage;
     }
 
 }
