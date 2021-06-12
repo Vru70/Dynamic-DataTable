@@ -33,7 +33,7 @@ export default class DynamicDataTable extends LightningElement
     @track totalSelection;
     @track hasPageChanged;
     @track initialLoad = true;
-    @track selectedRows = [];
+    @track selectedRows = [];   
     setData = [];
 
     @track searchString;
@@ -86,9 +86,14 @@ export default class DynamicDataTable extends LightningElement
             //console.log('this.dataToDisp', this.dataToDisp);
             this.endingRecord = this.pageSize;
 
+            // INPROGRESS// INPROGRESS// INPROGRESS// INPROGRESS// INPROGRESS
             
-            
-            
+            for (let i = 1; i <= this.totalPage; i++)
+            {
+                this.pageList.push(i);
+            }
+
+
             this.lblobjectName = this.SFDCobjectApiName; // Assigning Headder i.e Acount
             this.error = undefined;
         })
@@ -151,7 +156,7 @@ export default class DynamicDataTable extends LightningElement
         // using page number assigning values to array
     }
 
-    handleKeyChange(event)
+    handleKeyChange(event) // INPROGRESS
     {
         var searchString = event.target.value;
         var allRecords = this.allData;
@@ -190,11 +195,17 @@ export default class DynamicDataTable extends LightningElement
 
     }
 
-    setpageList()
+   /* setpageList() // INPROGRESS
     {
         pageList = [];
         startPage;
         endPage;
+    }*/
+
+
+    handleRowAction(event)
+    {
+        console.log('DBL CLick ID:', event.detail.action.Name);
     }
 
 }

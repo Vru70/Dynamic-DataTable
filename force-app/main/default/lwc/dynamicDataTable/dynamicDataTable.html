@@ -14,7 +14,7 @@
                 placeholder="Search" value={searchKey}>
             </lightning-input>
 
-            <lightning-datatable key-field="Id" data={dataToDisp} onrowselection={handleRowSelection}
+            <lightning-datatable key-field="Id" data={dataToDisp} onrowselection={handleRowSelection} onrowaction={handleRowAction}
                 show-row-number-column columns={columns} min-column-width="170">
             </lightning-datatable>
             <lightning-layout horizontal-align="space">
